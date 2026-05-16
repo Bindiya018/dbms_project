@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Railway Admin Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body class="login-body">
+    <main class="login-shell">
+        <section class="login-panel">
+            <div class="brand-mark">SR</div>
+            <p class="eyebrow">Smart Railway Tracking</p>
+            <h1>Admin Control Center</h1>
+            <p class="muted">Sign in to manage trains, stations, live status, routes and passenger bookings.</p>
+            {% if error %}
+            <div class="alert">{{ error }}</div>
+            {% endif %}
+            <form method="POST" class="login-form">
+                <label>Username
+                    <input name="username" value="admin" required>
+                </label>
+                <label>Password
+                    <input name="password" type="password" value="admin123" required>
+                </label>
+                <button type="submit">Login to Dashboard</button>
+            </form>
+        </section>
+        <section class="login-visual" aria-label="Railway network preview">
+            <div class="rail-lines">
+                <span></span><span></span><span></span>
+            </div>
+            <div class="train-card motion">
+                <strong>12951</strong>
+                <span>Mumbai Rajdhani</span>
+                <em>On Time</em>
+            </div>
+            <div class="signal-card">
+                <span class="signal green"></span>
+                <span class="signal yellow"></span>
+                <span class="signal red"></span>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
