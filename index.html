@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Railway Tracking and Management System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="logo">
+            <span>SR</span>
+            <strong>SmartRail</strong>
+        </div>
+        <nav>
+            <a href="#dashboard" class="active">Dashboard</a>
+            <a href="#tracking">Live Tracking</a>
+            <a href="#trains">Train Management</a>
+            <a href="#stations">Stations</a>
+            <a href="#routes">Routes</a>
+            <a href="#bookings">Bookings</a>
+            <a href="#analytics">Delay Analytics</a>
+        </nav>
+        <a class="logout" href="/logout">Logout</a>
+    </aside>
+
+    <main class="app-shell">
+        <header class="topbar">
+            <div>
+                <p class="eyebrow">Operations Dashboard</p>
+                <h1>Smart Railway Tracking and Management System</h1>
+            </div>
+            <div class="search-box">
+                <input id="globalSearch" placeholder="Search train number, name or station">
+                <button id="searchBtn">Search</button>
+            </div>
+        </header>
+
+        <section id="dashboard" class="stats-grid">
+            <article class="stat-card"><span>Total Trains</span><strong id="totalTrains">0</strong></article>
+            <article class="stat-card"><span>Active Routes</span><strong id="activeRoutes">0</strong></article>
+            <article class="stat-card warning"><span>Delayed Trains</span><strong id="delayedTrains">0</strong></article>
+            <article class="stat-card"><span>Station Count</span><strong id="stationCount">0</strong></article>
+        </section>
+
+        <section id="tracking" class="content-grid">
+            <article class="panel tracking-panel">
+                <div class="section-title">
+                    <div>
+                        <p class="eyebrow">Live Simulation</p>
+                        <h2>Train Movement Tracker</h2>
+                    </div>
+                    <button id="simulateBtn">Advance Simulation</button>
+                </div>
+                <div class="rail-track">
+                    <div class="track-line"></div>
+                    <div class="train-engine" id="animatedTrain">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <div class="station-pin start">Source</div>
+                    <div class="station-pin end">Destination</div>
+                </div>
+                <div id="liveCards" class="live-grid"></div>
+            </article>
+
+            <article class="panel map-panel">
+                <div class="section-title">
+                    <div>
+                        <p class="eyebrow">Route Map</p>
+                        <h2>Corridor Visualization</h2>
+                    </div>
+                    <select id="routeSelect"></select>
+                </div>
+                <div id="routeMap" class="route-map"></div>
+            </article>
+        </section>
+
+        <section id="trains" class="panel">
+            <div class="section-title">
+                <div>
+                    <p class="eyebrow">CRUD Module</p>
+                    <h2>Train Management</h2>
+                </div>
+            </div>
+            <form id="trainForm" class="form-grid">
+                <input type="hidden" id="trainId">
+                <input id="trainNumber" placeholder="Train number" required>
+                <input id="trainName" placeholder="Train name" required>
+                <select id="trainType">
+                    <option>Express</option>
+                    <option>Superfast</option>
+                    <option>Passenger</option>
+                    <option>Intercity</option>
+                    <option>Rajdhani</option>
+                </select>
+                <input id="coachCount" type="number" min="1" max="30" placeholder="Coach count" required>
+                <button type="submit">Save Train</button>
+            </form>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>No.</th><th>Name</th><th>Type</th><th>Coaches</th><th>Actions</th></tr></thead>
+                    <tbody id="trainTable"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="stations" class="panel">
+            <div class="section-title">
+                <div>
+                    <p class="eyebrow">Station Registry</p>
+                    <h2>Station Management</h2>
+                </div>
+            </div>
+            <form id="stationForm" class="form-grid">
+                <input id="stationCode" placeholder="Station code" required>
+                <input id="stationName" placeholder="Station name" required>
+                <input id="stationCity" placeholder="City" required>
+                <input id="stationState" placeholder="State" required>
+                <button type="submit">Add Station</button>
+            </form>
+            <div id="stationCards" class="station-grid"></div>
+        </section>
+
+        <section id="routes" class="panel">
+            <div class="section-title">
+                <div>
+                    <p class="eyebrow">Schedules and Platforms</p>
+                    <h2>Route and Train Schedule</h2>
+                </div>
+            </div>
+            <form id="routeForm" class="form-grid">
+                <input id="routeName" placeholder="Route name" required>
+                <select id="routeTrain"></select>
+                <select id="routeSource"></select>
+                <select id="routeDestination"></select>
+                <input id="routeDistance" type="number" min="1" placeholder="Total distance km" required>
+                <button type="submit">Create Route</button>
+            </form>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>Train</th><th>Station</th><th>Stop</th><th>Arrival</th><th>Departure</th><th>Platform</th><th>Distance</th></tr></thead>
+                    <tbody id="scheduleTable"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="bookings" class="content-grid">
+            <article class="panel">
+                <div class="section-title">
+                    <div>
+                        <p class="eyebrow">Passenger Module</p>
+                        <h2>Seat Booking Simulation</h2>
+                    </div>
+                </div>
+                <form id="bookingForm" class="booking-form">
+                    <input id="passengerName" placeholder="Passenger name" required>
+                    <input id="passengerAge" type="number" placeholder="Age" required>
+                    <select id="passengerGender"><option>Male</option><option>Female</option><option>Other</option></select>
+                    <input id="passengerPhone" placeholder="Phone" required>
+                    <input id="passengerEmail" type="email" placeholder="Email">
+                    <select id="bookingTrain"></select>
+                    <select id="bookingSource"></select>
+                    <select id="bookingDestination"></select>
+                    <input id="journeyDate" type="date" required>
+                    <input id="seatNumber" placeholder="Seat number" required>
+                    <input id="fare" type="number" placeholder="Fare" required>
+                    <button type="submit">Generate Ticket</button>
+                </form>
+            </article>
+            <article class="panel ticket-panel">
+                <div class="section-title">
+                    <div>
+                        <p class="eyebrow">Ticket</p>
+                        <h2>Generated Ticket</h2>
+                    </div>
+                </div>
+                <div id="ticketBox" class="ticket-box">No ticket generated yet.</div>
+            </article>
+        </section>
+
+        <section id="analytics" class="content-grid">
+            <article class="panel">
+                <div class="section-title">
+                    <div>
+                        <p class="eyebrow">Monitoring</p>
+                        <h2>Delayed Trains</h2>
+                    </div>
+                </div>
+                <div id="delayList" class="delay-list"></div>
+            </article>
+            <article class="panel">
+                <div class="section-title">
+                    <div>
+                        <p class="eyebrow">Report</p>
+                        <h2>Punctuality Analytics</h2>
+                    </div>
+                </div>
+                <canvas id="punctualityChart" height="230"></canvas>
+            </article>
+        </section>
+    </main>
+</body>
+</html>
